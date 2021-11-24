@@ -12,7 +12,7 @@ int getNumberOfGroups(int nRows, int nColumns, int aisleSeat,
    * Escribe tu código para la función principal aquí
    */
   // Aquí voy a preparar los datos para que C++ llame al código de Lua,
-  // el std::vector<std::pair<int, int>> se convertira en una tabla de tablas, cuyas tablas internas tendrán dos valores,
+  // el std::vector<std::pair<int, int>> se convertirá en una tabla de tablas, cuyas tablas internas tendrán dos valores,
   // {{1, 2}, {3, 5}, {4, 4}}
   lua_State *L = luaL_newstate();
   luaopen_base(L);

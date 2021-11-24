@@ -1,8 +1,8 @@
 local function isFree(positions, row, column, groupSize, peopleToBePlaced) --bool
   for _, position in ipairs(positions) do
-    if position[1] == row and position[2] == column then
+    if (position[1] == row) and (position[2] == column) then
       return false
-    elseif (row < position[1]) or ((position[1] == row) and (column < position[2])) then -- Suponiendo que las posiciones estan ordenadas
+    elseif (row < position[1]) or ((position[1] == row) and (column < position[2])) then -- Suponiendo que las posiciones están ordenadas
       return true
     end
   end
