@@ -1,12 +1,7 @@
 #include <iostream>
 #include <vector>
 
-extern "C"
-{
-#include "lua542/include/lauxlib.h"
-#include "lua542/include/lua.h"
-#include "lua542/include/lualib.h"
-}
+#include "lua542/include/lua.hpp"
 
 /* Puedes escribir otras funciones auxiliares aquí */
 
@@ -40,6 +35,7 @@ int getNumberOfGroups(int nRows, int nColumns, int aisleSeat,
   lua_pushinteger(L, groupSize);
   lua_call(L, 5, 1);
   int result = lua_tonumber(L, -1);
+  lua_pop(L, 1);
   return result;
 }
 
