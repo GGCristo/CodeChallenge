@@ -11,6 +11,9 @@ int getNumberOfGroups(int nRows, int nColumns, int aisleSeat,
   /*
    * Escribe tu código para la función principal aquí
    */
+  // Aquí voy a preparar los datos para que C++ llame al código de Lua,
+  // el std::vector<std::pair<int, int>> se convertira en una tabla de tablas, cuyas tablas internas tendrán dos valores,
+  // {{1, 2}, {3, 5}, {4, 4}}
   lua_State *L = luaL_newstate();
   luaopen_base(L);
   luaL_requiref(L, "io", luaopen_io, 1);
@@ -23,7 +26,7 @@ int getNumberOfGroups(int nRows, int nColumns, int aisleSeat,
   for (int i = 0; i < positions.size(); i++)
   {
     lua_pushinteger(L, i + 1);
-    lua_newtable(L);
+    lua_createtable(L, 2, 0);
     lua_pushinteger(L, 1);
     lua_pushinteger(L, positions[i].first);
     lua_settable(L, -3);

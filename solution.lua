@@ -2,6 +2,8 @@ local function isFree(positions, row, column, groupSize, peopleToBePlaced) --boo
   for _, position in ipairs(positions) do
     if position[1] == row and position[2] == column then
       return false
+    elseif (row < position[1]) or ((position[1] == row) and (column < position[2])) then -- Suponiendo que las posiciones estan ordenadas
+      return true
     end
   end
   return true
@@ -13,7 +15,7 @@ end
 
 local function tryFromPosition(row, column, nRows, nColumns, aisleSeat, positions, groupSize) --bool
   local peopleToBePlaced = groupSize
-  while column <= nColumns do
+  while column + peopleToBePlaced-1 <= nColumns do -- Con "+ peopleToBePlaced-1" no lo intenta si el número de personas faltante sobrepasa las columnas restantes
     if isFree(positions, row, column) then
       if (column ~= aisleSeat) and (column ~= aisleSeat+1) then
         peopleToBePlaced = peopleToBePlaced-1
@@ -23,17 +25,17 @@ local function tryFromPosition(row, column, nRows, nColumns, aisleSeat, position
         peopleToBePlaced = peopleToBePlaced-2 -- Ya se que la siguiente columna existe, esta libre y por lo menos me faltan dos personas por añadir
         column = column+1
       else
-        return false
+        return false -- Alguien se hubiera quedado solo por el "aisleSeat"
       end
       if peopleToBePlaced == 0 then
         return true
       end
     else
-      return false
+      return false --"Ya esta ocupado"
     end
     column = column+1
   end
-  return false
+  return false --"Final de línea"
 end
 
 function getNumberOfGroups(nRows, nColumns, aisleSeat, positions, groupSize) --int
