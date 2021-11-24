@@ -13,7 +13,7 @@ local function isLeftSameGroup(groupSize, peopleToBePlaced) --bool
   return peopleToBePlaced ~= groupSize
 end
 
-local function tryFromPosition(row, column, nRows, nColumns, aisleSeat, positions, groupSize) --bool
+local function tryFromPosition(row, column, nRows, nColumns, aisleSeat, positions, groupSize) --bool, int
   local peopleToBePlaced = groupSize
   while column + peopleToBePlaced-1 <= nColumns do -- Con "+ peopleToBePlaced-1" no lo intenta si el número de personas faltante sobrepasa las columnas restantes
     if isFree(positions, row, column) then
@@ -25,17 +25,17 @@ local function tryFromPosition(row, column, nRows, nColumns, aisleSeat, position
         peopleToBePlaced = peopleToBePlaced-2 -- Ya se que la siguiente columna existe, esta libre y por lo menos me faltan dos personas por añadir
         column = column+1
       else
-        return false -- Alguien se hubiera quedado solo por el "aisleSeat"
+        return false, 1 -- Alguien se hubiera quedado solo por el "aisleSeat"
       end
       if peopleToBePlaced == 0 then
-        return true
+        return true, groupSize
       end
     else
-      return false --"Ya esta ocupado"
+      return false, groupSize-peopleToBePlaced+1 --"Ya esta ocupado", (tamaño del grupo-personas que faltan por poner) = personas que he podido poner+el asiento ocupado
     end
     column = column+1
   end
-  return false --"Final de línea"
+  return false, column+peopleToBePlaced-1 --"Final de línea"
 end
 
 function getNumberOfGroups(nRows, nColumns, aisleSeat, positions, groupSize) --int
@@ -43,12 +43,11 @@ function getNumberOfGroups(nRows, nColumns, aisleSeat, positions, groupSize) --i
   column = 1
   for row = 1, nRows do
     while column <= nColumns do
-      if tryFromPosition(row, column, nRows, nColumns, aisleSeat, positions, groupSize) then
+      isSucceed, advance = tryFromPosition(row, column, nRows, nColumns, aisleSeat, positions, groupSize)
+      if isSucceed then
         groupsPlaced = groupsPlaced+1
-        column = column + groupSize
-      else
-        column = column+1
       end
+      column = column + advance
     end
     column = 1
   end
